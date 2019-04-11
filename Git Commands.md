@@ -12,7 +12,7 @@ git push origin master
 git init 
 
 //Clone a remote repository 
-git clone <URL> <where to clone?
+git clone <URL> <where to clone>
 git clone https://github.com/DevByTodd/WebDevBootCamp.git .
 
 //this shows us what is the status of our reporitory
@@ -46,4 +46,43 @@ git pull origin master
 
 // this will push all changes to remote
 git push origin master
+
+//WORKING WITH BRANCHES use this is your are working on a diff feature
+//will show the branches
+git branch 
+ 
+//could be WebDevBootCamp-authentication
+//git branch WebDevBootCamp-authentication
+git branch <name of branch>
+
+//This will chech out that branch
+//git checkout WebDevBootCamp-authentication
+git checkout <name of branches>
+
+//to push to the remote responsitory 
+git push -u origin calc-divide
+
+git branch -a
+
+//Merge a branch
+git checkout master
+
+git pull origin master
+
+git branch --merged
+
+git merge <name of branch>
+
+git push origin master
+
+//delete the branch
+git branch --merged
+git branch -d <anme of branch>
+git branch -a
+git push origin --delete <name of branch>
+
+
+
+
+
 
