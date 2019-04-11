@@ -2,6 +2,7 @@ var bodyParser  =   require("body-parser"),
     express     =   require("express"),
     mongoose    =   require("mongoose")
     app         =   express();
+    port	=   3000
 
 //APP Config
 //Connect to the DB
@@ -88,6 +89,9 @@ app.get("/blogs/:id", function(req, res) {
     });
 });
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("The Server Has Started!!");
-});
+//
+//app.listen(process.env.PORT, process.env.IP, function(){
+//    console.log("The Server Has Started!!");
+//});
+// Changed for localhost running the app
+app.listen(port, () => console.log(`Blog app listening on port ${port}!`))
