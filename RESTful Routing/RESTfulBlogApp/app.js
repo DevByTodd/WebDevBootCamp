@@ -8,7 +8,12 @@ var bodyParser      =   require("body-parser"),
 //APP Config
 //Connect to the DB
 mongoose.connect("mongodb://localhost/RESTful_Blog_app", { 
-    useNewUrlParser: true 
+    useNewUrlParser: true
+//    useCreateIndex: true 
+}).then(() => {
+	console.log('connected to DB!');
+}).catch(err => {
+	console.log('ERROR:', err.message);
 });
 
 app.set("view engine", "ejs");
