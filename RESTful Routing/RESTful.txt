@@ -14,14 +14,14 @@ DESTROY
 
 RESTful Routes
 
-Name            Path                HTTP Verb           Purpose
-Index           /dogs               GET                 List all Dogs 
-New             /dogs/new           GET                 Show new Dogs form
-Create          /dogs               POST                Create a new dog, then redirect somewhere
-Show            /dogs/:id           GET                 Show info about one specific dog
-Edit            /dogs/:id/edit      GET                 Show edit form for one dog/id
-Update          /dogs/:id           PUT                 Update a particular dog, then redirect somewhere
-Destroy         /dogs:id            DELETE              Delete a particular dog, then redirect somewhere
+Name            Path                HTTP Verb  Purpose                                              Mongoose Method
+Index           /dogs               GET        List all Dogs                                        Dog.find()
+New             /dogs/new           GET        Show new Dogs form                                   N/A
+Create          /dogs               POST       Create a new dog, then redirect somewhere            Dog.Create()
+Show            /dogs/:id           GET        Show info about one specific dog                     Dog.findById()
+Edit            /dogs/:id/edit      GET        Show edit form for one dog/id                        Dog.findById()
+Update          /dogs/:id           PUT        Update a particular dog, then redirect somewhere     Dog.findByIdAndUpdate()
+Destroy         /dogs:id            DELETE     Delete a particular dog, then redirect somewhere     Dog.findByIdAndRemove()
 
 ##Blog Index
 * SEtup the Blog App
@@ -53,6 +53,13 @@ Destroy         /dogs:id            DELETE              Delete a particular dog,
 * Add Update Form
 * Add Method-Override
 
+#Destroyyyyyy
+* Add Destroy Route
+* Add Edit and Destroy links
+
+##Final Touches
+* Sanitize blog body
+* Style Index* Update REST Table
 
 
 

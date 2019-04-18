@@ -1,9 +1,10 @@
-var bodyParser      =   require("body-parser"), 
-    methodOverride  =   require("method-override"),
-    express         =   require("express"),
-    mongoose        =   require("mongoose")
-    app             =   express();
-    port	        =   3000
+var bodyParser          =   require("body-parser"), 
+    methodOverride      =   require("method-override"),
+    express             =   require("express"),
+    mongoose            =   require("mongoose"),
+    expressSanitizer    =  require("express-sanitizer"),
+    app                 =   express();
+    port	            =   3000
 
 //APP Config
 //Connect to the DB
@@ -20,6 +21,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.use(expressSanitizer());
 
 //MONGOOSE/MODEL CONFIG Mongo DB schema
 var blogSchema = mongoose.Schema({
@@ -71,6 +73,11 @@ app.get("/blogs/new", function(req, res){
 // CREATE ROUTE
 app.post("/blogs", function(req, res){
     //create blog
+    console.log("======BEFORE========")
+    console.log(req.body);
+    req.body.blog.body = req.sanitize(req.body.blog.body);
+    console.log("======AFTER========")
+    console.log(req.body);
     Blog.create(req.body.blog, function(err, newBlog){
         if(err){
             res.render("new");
@@ -106,6 +113,7 @@ app.get("/blogs/:id/edit", function(req, res) {
 
 //UPDATE Route
 app.put("/blogs/:id", function(req, res){
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
         if(err){
             res.redirect("/blogs");
@@ -113,6 +121,19 @@ app.put("/blogs/:id", function(req, res){
             res.redirect("/blogs/" + req.params.id);
         }
     });
+});
+
+//Delete Route
+app.delete("/blogs/:id", function(req, res){
+    //Destroy blog
+    Blog.findByIdAndDelete(req.params.id, function(err){
+        if(err){
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs");
+        }
+    });
+    //redirect somewhere
 });
 
 //
