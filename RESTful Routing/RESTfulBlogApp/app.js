@@ -20,8 +20,9 @@ mongoose.connect("mongodb://localhost/RESTful_Blog_app", {
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride("_method"));
 app.use(expressSanitizer());
+app.use(methodOverride("_method"));
+
 
 //MONGOOSE/MODEL CONFIG Mongo DB schema
 var blogSchema = mongoose.Schema({
@@ -71,7 +72,7 @@ app.get("/blogs/new", function(req, res){
 
 
 // CREATE ROUTE
-app.post("/blogs", function(req, res){
+app.post("/blogs", function(req, res, next){
     //create blog
     console.log("======BEFORE========")
     console.log(req.body);

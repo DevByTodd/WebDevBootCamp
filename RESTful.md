@@ -59,7 +59,8 @@ Destroy         /dogs:id            DELETE     Delete a particular dog, then red
 
 ##Final Touches
 * Sanitize blog body
-* Style Index* Update REST Table
+* Style Index
+* Update REST Table
 
 
 
