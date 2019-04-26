@@ -87,7 +87,7 @@ app.post("/blogs", function(req, res, next){
             res.redirect("/blogs");
         }
     });
-    
+ 
 })
 
 // Show Route
