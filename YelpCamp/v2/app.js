@@ -1,10 +1,19 @@
 var express     = require("express"),
     bodyParser  = require("body-parser"),
     app         = express(),
-    mongoose    = require("mongoose");
+    mongoose    = require("mongoose"),
+    Campground  = require("./models/campground");
+    PORT        = 3000
 
-mongoose.connect("mongodb://localhost/yelp_camp", { 
-    useNewUrlParser: true 
+//Connect to the DB
+mongoose.connect("mongodb://localhost/RESTful_Blog_app", { 
+        useNewUrlParser: true
+    //    useCreateIndex: true 
+    }).then(() => {
+        console.log('connected to DB!');
+    }).catch(err => {
+        console.log('ERROR:', err.message);
+    });
     
 });
 
@@ -13,13 +22,6 @@ app.set("view engine", "ejs");
 
 //Schema Setup
 
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -74,6 +76,9 @@ app.get("/campgrounds/:id", function(req, res){
 });
 
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("The YelpCamp Server Has Started!!");
-});
+//
+//app.listen(process.env.PORT, process.env.IP, function(){
+//    console.log("The Server Has Started!!");
+//});
+// Changed for localhost running the app
+app.listen(port, () => console.log(`Blog app listening on port ${port}!`))
