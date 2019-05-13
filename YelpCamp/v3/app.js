@@ -1,14 +1,15 @@
 var express     = require("express"),
     bodyParser  = require("body-parser"),
     app         = express(),
-    port        = 3000,
     mongoose    = require("mongoose"),
     Campground  = require("./models/campground"),
-    Comment     = require("./models/comment"),
-    User        = require("./models/user");
+    seedDB      = require("./seeds");
+    
+
+
 
 //Connect to the DB
-mongoose.connect("mongodb://localhost/RESTful_Blog_app", { 
+mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
         useNewUrlParser: true
     //    useCreateIndex: true 
     }).then(() => {
@@ -17,13 +18,12 @@ mongoose.connect("mongodb://localhost/RESTful_Blog_app", {
         console.log('ERROR:', err.message);
     });
 
+seedDB();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 //Schema Setup
-
-
 app.get("/", function(req, res){
     res.render("landing");
 });
@@ -66,20 +66,24 @@ app.get("/campgrounds/new", function(req, res){
 //SHOW - info about one campground
 app.get("/campgrounds/:id", function(req, res){
     //find the campround with ID
-    Campground.findById(req.params.id, function(err, foundCampground){
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
        if(err){
            console.log(err);
        } else {
+           console.log(foundCampground);
            //render show template with that campround
-           res. render("show", {campground: foundCampground});
+           res.render("show", {campground: foundCampground});
        }
     });
 });
 
 
 //
+// var PORT = 3000;
 //app.listen(process.env.PORT, process.env.IP, function(){
 //    console.log("The Server Has Started!!");
 //});
 // Changed for localhost running the app
-app.listen(port, () => console.log('Yelp app has started app listening on port ${port}!`))
+app.listen(3000, () => 
+    console.log(`Yelp app has started app listening on 3000`)
+);
