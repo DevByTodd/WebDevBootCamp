@@ -80,7 +80,12 @@ Create   /campgrounds/:id/comments        POST
    * Passport
    * Passport local
    * Passport Local Mongoose
-
 * Walk through auth flow
 * Discuss session 
    * Express-Session
+
+#Auth Code Along Part 1
+* Set up folder structure
+* Install needed packages
+* Add root route and template
+* Add secret route and template
