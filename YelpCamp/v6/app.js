@@ -1,13 +1,13 @@
-var express     = require("express"),
-    bodyParser  = require("body-parser"),
-    app         = express(),
-    mongoose    = require("mongoose"),
-    Campground  = require("./models/campground"),
-    Comment     = require("./models/comment"),
-    seedDB      = require("./seeds");
-    
-
-
+var express     =   require("express"),
+    bodyParser  =   require("body-parser"),
+    app         =   express(),
+    mongoose    =   require("mongoose"),
+    passport    =   require("passport"),
+    LocalStrategy   =   require("passport-local"),
+    Campground  =   require("./models/campground"),
+    Comment     =   require("./models/comment"),
+    User        =   require("./models/user"),
+    seedDB      =   require("./seeds");
 
 //Connect to the DB
 mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
@@ -24,6 +24,18 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
 
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Once agin i win the best dev",
+    resave: false,
+    saveUnitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser);
+passport.deserializeUser(User.deserializeUser());
+
 //Schema Setup
 app.get("/", function(req, res){
     res.render("landing");
@@ -32,11 +44,11 @@ app.get("/", function(req, res){
 //INDEX - Show all campgrounds
 app.get("/campgrounds", function(req, res){
     // Get all Campgrounds from DB
-    Campground.find({}, function(err, campgrounds){
+    Campground.find({}, function(err, allCampgrounds){
         if(err){
             console.log(err);
         } else {
-            res.render("campgrounds/index", {campgrounds:campgrounds});
+            res.render("campgrounds/index",{campgrounds:allCampgrounds});
         } 
     });
 });
@@ -54,7 +66,7 @@ app.post("/campgrounds", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.redirect("campgrounds");
+            res.redirect("/campgrounds");
         }
     });
 });
@@ -119,7 +131,28 @@ app.post("/campgrounds/:id/comments", function(req, res){
    }); 
  });
 
-//
+//=======
+// AUTH ROUTES
+//=======
+// show register from
+app.get("/register", function(req, res){
+    res.render("register");
+});
+
+// handle sign up logic
+app.post("/register", function(req, res){
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("register");
+        }
+        passport.authenticate("local")(req, res, function(){
+           res.redirect("/campgrounds"); 
+        });
+    });
+});
+
 // var PORT = 3000;
 //app.listen(process.env.PORT, process.env.IP, function(){
 //    console.log("The Server Has Started!!");

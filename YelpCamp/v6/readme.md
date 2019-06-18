@@ -75,6 +75,10 @@ Create   /campgrounds/:id/comments        POST
 * Add sidebar to show page
 * Display  comments nicely 
 
+## Finish Styling Show Page
+* Add public directory
+* Add custom stylesheet
+
 ##Intro to Auth
 * What tools are we using?
    * Passport
@@ -84,3 +88,12 @@ Create   /campgrounds/:id/comments        POST
 * Walk through auth flow
 * Discuss session 
    * Express-Session
+
+## Auth Pt. 1 - Add User Model
+* Install all packages needed for Auth
+* Define User model
+
+## Auth Pt. 2 - Register
+* Configure Passport
+* Add register routes
+* Add register template
