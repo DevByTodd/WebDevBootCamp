@@ -10,14 +10,26 @@ var express     =   require("express"),
     seedDB      =   require("./seeds");
 
 //Connect to the DB
-mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
-        useNewUrlParser: true
-    //    useCreateIndex: true 
-    }).then(() => {
-        console.log('connected to DB!');
-    }).catch(err => {
-        console.log('ERROR:', err.message);
-    });
+// mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
+//         useNewUrlParser: true
+//     //    useCreateIndex: true 
+//     }).then(() => {
+//         console.log('connected to DB!');
+//     }).catch(err => {
+//         console.log('ERROR:', err.message);
+// });
+
+//Mongoose connect to Atlas MongoDB 
+mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-6nqvj.mongodb.net/test?retryWrites=true&w=majority', {
+	useNewUrlParser: true,
+	useCreateIndex: true
+}).then(() => {
+	console.log('Coneected to DB!!');
+}).catch(err => {
+	console.log('ERROR:', err.message);
+});
+
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -161,3 +173,4 @@ app.post("/register", function(req, res){
 app.listen(3000, () => 
     console.log(`Yelp app has started app listening on 3000`)
 );
+
