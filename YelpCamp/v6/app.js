@@ -10,24 +10,24 @@ var express     =   require("express"),
     seedDB      =   require("./seeds");
 
 //Connect to the DB
-// mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
-//         useNewUrlParser: true
-//     //    useCreateIndex: true 
-//     }).then(() => {
-//         console.log('connected to DB!');
-//     }).catch(err => {
-//         console.log('ERROR:', err.message);
-// });
+mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
+        useNewUrlParser: true
+    //    useCreateIndex: true 
+    }).then(() => {
+        console.log('connected to DB!');
+    }).catch(err => {
+        console.log('ERROR:', err.message);
+});
 
 //Mongoose connect to Atlas MongoDB 
-mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-6nqvj.mongodb.net/test?retryWrites=true&w=majority', {
-	useNewUrlParser: true,
-	useCreateIndex: true
-}).then(() => {
-	console.log('Coneected to DB!!');
-}).catch(err => {
-	console.log('ERROR:', err.message);
-});
+// mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-6nqvj.mongodb.net/test?retryWrites=true&w=majority', {
+// 	useNewUrlParser: true,
+// 	useCreateIndex: true
+// }).then(() => {
+// 	console.log('Coneected to DB!!');
+// }).catch(err => {
+// 	console.log('ERROR:', err.message);
+// });
 
 
 
@@ -37,10 +37,11 @@ app.use(express.static(__dirname + "/public"));
 seedDB();
 
 // PASSPORT CONFIGURATION
-app.use(require("express-session")({
+//app.use(require("express-session")({
+app.use(require('express-session')({
     secret: "Once agin i win the best dev",
     resave: false,
-    saveUnitialized: false
+    saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -159,11 +160,27 @@ app.post("/register", function(req, res){
             console.log(err);
             return res.render("register");
         }
-        passport.authenticate("local")(req, res, function(){
-           res.redirect("/campgrounds"); 
-        });
+        passport.authenticate("local",
+        {
+            successRedirect:"/campgrounds", 
+            failureRedirect: "/register"
+        }), function(req, res){ 
+        }
     });
 });
+
+//Show login form
+app.get("/login", function(req, res){
+    res.render("login");
+}); 
+
+//handling login logic
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect:"/campgrounds", 
+        failureRedirect: "/login"
+    }), function(req, res){
+ });
 
 // var PORT = 3000;
 //app.listen(process.env.PORT, process.env.IP, function(){
