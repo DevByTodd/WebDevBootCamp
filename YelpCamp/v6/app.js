@@ -10,7 +10,7 @@ var express     =   require("express"),
     seedDB      =   require("./seeds");
 
 //Connect to the DB
-mongoose.connect("mongodb://localhost/yelp_camp_v3", { 
+mongoose.connect("mongodb://localhost/yelp_camp_v6", { 
         useNewUrlParser: true
     //    useCreateIndex: true 
     }).then(() => {
@@ -38,7 +38,7 @@ seedDB();
 
 // PASSPORT CONFIGURATION
 //app.use(require("express-session")({
-app.use(require('express-session')({
+app.use(require("express-session")({
     secret: "Once agin i win the best dev",
     resave: false,
     saveUninitialized: false
@@ -46,10 +46,14 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser);
+passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//Schema Setup
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+ 
 app.get("/", function(req, res){
     res.render("landing");
 });
@@ -70,15 +74,16 @@ app.get("/campgrounds", function(req, res){
 app.post("/campgrounds", function(req, res){
    //  res.send("YOU HIT THE POST ROUTE!!")
     //get data from from and add to campgrounds aray
-    var name = req.body.name 
-    var image = req.body.image
-    var desc = req.body.description
+    var name = req.body.name; 
+    var image = req.body.image;
+    var desc = req.body.description;
     var newCampground =  {name: name, image: image, description: desc}
     //Create a new campground and save to db
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
             console.log(err);
         } else {
+        //redirect back to campgrounds page
             res.redirect("/campgrounds");
         }
     });
@@ -96,7 +101,7 @@ app.get("/campgrounds/:id", function(req, res){
        if(err){
            console.log(err);
        } else {
-           console.log(foundCampground);
+           console.log(foundCampground)
            //render show template with that campround
            res.render("campgrounds/show", {campground: foundCampground});
        }
@@ -148,11 +153,11 @@ app.post("/campgrounds/:id/comments", function(req, res){
 // AUTH ROUTES
 //=======
 // show register from
-app.get("/register", function(req, res){
-    res.render("register");
-});
-
 // handle sign up logic
+app.get("/register", function(req, res){
+    res.render("register"); 
+});
+//handle sign up logic
 app.post("/register", function(req, res){
     var newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user){
@@ -160,27 +165,23 @@ app.post("/register", function(req, res){
             console.log(err);
             return res.render("register");
         }
-        passport.authenticate("local",
-        {
-            successRedirect:"/campgrounds", 
-            failureRedirect: "/register"
-        }), function(req, res){ 
-        }
+        passport.authenticate("local")(req, res, function(){
+           res.redirect("/campgrounds"); 
+        });
     });
 });
 
 //Show login form
 app.get("/login", function(req, res){
-    res.render("login");
-}); 
-
+   res.render("login");
+});
 //handling login logic
 app.post("/login", passport.authenticate("local", 
     {
-        successRedirect:"/campgrounds", 
+        successRedirect: "/campgrounds",
         failureRedirect: "/login"
     }), function(req, res){
- });
+});
 
 // var PORT = 3000;
 //app.listen(process.env.PORT, process.env.IP, function(){
