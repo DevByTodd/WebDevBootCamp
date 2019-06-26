@@ -101,7 +101,7 @@ app.get("/campgrounds/:id", function(req, res){
        if(err){
            console.log(err);
        } else {
-           console.log(foundCampground)
+           //console.log(foundCampground)
            //render show template with that campround
            res.render("campgrounds/show", {campground: foundCampground});
        }
@@ -113,15 +113,12 @@ app.get("/campgrounds/:id", function(req, res){
 //  Comments ROUTES
 /// ==================
 
-app.get("/campgrounds/:id/comments/new", function(req, res){
-    
-  
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res){
 //    find the campround with ID
     Campground.findById(req.params.id, function(err, campground){
        if(err){
            console.log(err);
        } else {
-           console.log(campground);
            //render show template with that campround
            res.render("comments/new", {campground: campground});
        }
@@ -129,7 +126,7 @@ app.get("/campgrounds/:id/comments/new", function(req, res){
 });
 
 //POST
-app.post("/campgrounds/:id/comments", function(req, res){
+app.post("/campgrounds/:id/comments", isLoggedIn, function(req, res){
    //lookup campground using ID
    Campground.findById(req.params.id, function(err, campground){
         if(err){
@@ -183,6 +180,19 @@ app.post("/login", passport.authenticate("local",
     }), function(req, res){
 });
 
+
+// Logic route logout
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/campgrounds");
+});
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 // var PORT = 3000;
 //app.listen(process.env.PORT, process.env.IP, function(){
 //    console.log("The Server Has Started!!");
