@@ -49,17 +49,19 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//This is global for current user
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
     next();
 });
- 
+
 app.get("/", function(req, res){
     res.render("landing");
 });
 
 //INDEX - Show all campgrounds
 app.get("/campgrounds", function(req, res){
+    console.log(req.user);
     // Get all Campgrounds from DB
     Campground.find({}, function(err, allCampgrounds){
         if(err){
