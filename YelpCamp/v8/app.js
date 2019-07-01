@@ -6,7 +6,7 @@ var express     =   require("express"),
     LocalStrategy   =   require("passport-local"),
     Campground  =   require("./models/campground"),
     Comment     =   require("./models/comment"),
-    User        =   require("./models/user"),
+    User        =   require("./models/user");
     seedDB      =   require("./seeds");
 
 //requring routes
@@ -15,7 +15,7 @@ var commentRoutes       = require("./routes/comments"),
     campgroundsRoutes   = require("./routes/campgrounds");
 
 //Connect to the DB
-mongoose.connect("mongodb://localhost/yelp_camp_v6", { 
+mongoose.connect("mongodb://localhost/yelp_camp_v8", { 
         useNewUrlParser: true
     //    useCreateIndex: true 
     }).then(() => {
@@ -37,7 +37,9 @@ mongoose.connect("mongodb://localhost/yelp_camp_v6", {
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-seedDB();
+ 
+//seed the db
+ //seedDB();
 
 // PASSPORT CONFIGURATION
 //app.use(require("express-session")({
