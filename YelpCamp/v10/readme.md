@@ -115,6 +115,7 @@ Each Campground has:
 
 #Deleting Campgrounds
 * Add Destroy Route
+   * make it delete all comments with post
 * Add Delete button
 
 #Authorization Part 1: Campgrounds
