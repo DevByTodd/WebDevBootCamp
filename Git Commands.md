@@ -16,7 +16,7 @@ git clone <URL> <where to clone>
 git clone https://github.com/DevByTodd/WebDevBootCamp.git .
 
 //this shows us what is the status of our reporitory
-git status statu s
+git status status
 
 //This will add the file
 git add FILE
