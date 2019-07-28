@@ -3,6 +3,7 @@ var router  = express.Router();
 var Comment =   require('../models/comment');
 var Campground = require("../models/campground");
 
+
 //INDEX - Show all campgrounds route
 router.get("/", function(req, res){
     // Get all Campgrounds from DB
@@ -78,33 +79,25 @@ router.put("/:id", checkCampgroundOwnership, function(req, res){
 });
 
 // DESTROY CAMPGROUND ROUTE
-router.delete("/:id", checkCampgroundOwnership, function(req, res){
-    Campground.findByIdAndDelete(req.params.id, function(err){
-        if(err){
-            return next(err);
+// router.delete("/:id", checkCampgroundOwnership, function(req, res){
+//     Campground.findByIdAndDelete(req.params.id, function(err){
+//         if(err){
+//             return next(err);
+//             res.redirect("/campgrounds");
+//         } else {
+//             res.redirect("/campgrounds");
+//         }       
+//     });
+// });
+router.delete("/:id", checkCampgroundOwnership, (req, res, next) => {
+    Campground.findById(req.params.id, (err, campgound) => {
+		if(err) return next(err);
+		campgound.remove();
+	   // redirect somewhere (show Page)
+			req.flash('success', 'Campground Deleted successfully!');
             res.redirect("/campgrounds");
-        } else {
-            res.redirect("/campgrounds");
-        }       
     });
 });
-// router.delete("/:id", checkCampgroundOwnership, function(req, res){
-//     Campground.findById(req.params.id, function(err, campgound){
-//         Comment.remove({
-//             "_id": {
-//                 $in: campgound.comments
-//             }
-//         }, function(er){
-//             if(err){
-//                 return next(err);
-//                 campgound.remove();
-//                 // redirect somewhere (show Page)
-//                 res.redirect("/campgrounds");
-//             }
-        
-//         })
-//     })
-// });
 
 //Middleware
 function isLoggedIn(req, res, next){

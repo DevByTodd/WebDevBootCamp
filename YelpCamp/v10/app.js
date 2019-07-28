@@ -7,8 +7,9 @@ var express     =   require("express"),
     methodOverride  =   require("method-override"),
     Campground  =   require("./models/campground"),
     Comment     =   require("./models/comment"),
-    User        =   require("./models/user");
+    User        =   require("./models/user"),
     seedDB      =   require("./seeds");
+	flash		=	require("connect-flash");
 
 //requring routes
 var commentRoutes       = require("./routes/comments"),
@@ -39,7 +40,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
- //seedDB(); //seed the db
+//seedDB(); //seed the db
+app.use(flash());
 
 // PASSPORT CONFIGURATION
 //app.use(require("express-session")({
@@ -64,7 +66,6 @@ app.use(function(req, res, next){
 app.use(indexRoutes);
 app.use("/campgrounds", campgroundsRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
-
 
 // app.listen(process.env.PORT, process.env.IP, function(){
 //    console.log("The YelpCamp Server Has Started!");
