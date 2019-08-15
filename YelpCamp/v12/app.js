@@ -16,22 +16,34 @@ var commentRoutes       = require("./routes/comments"),
     indexRoutes          = require("./routes/index"),
     campgroundsRoutes   = require("./routes/campgrounds");
 
-//Connect to the DB
-mongoose.connect("mongodb://localhost/yelp_camp_v12", { 
-        useNewUrlParser: true
-    //    useCreateIndex: true 
+//DB ENV variable Set the local ENV for your solution.
+// for Prod or cloud DB, with Atlas MongoDB set 
+// DATABASEURL to 
+// mongodb+srv://debbytodd:T0ddrocks1!@cluster0-iuoku.mongodb.net/test?retryWrites=true&w=majority
+//
+// For local ENV DB set 
+// DATABASEURL to 
+// mongodb://localhost/yelp_camp_v12
+// in console 
+// export DATABASEURL=
+
+console.log("Coneected to DB on " + process.env.DATABASEURL);
+
+const dbURL = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v12";
+mongoose.connect(dbURL, { 
+        useNewUrlParser: true,
+     	useCreateIndex: true 
     }).then(() => {
-        console.log('connected to DB!');
+        console.log('connected to DB! ' + dbURL);
     }).catch(err => {
         console.log('ERROR:', err.message);
 });
-
-//Mongoose connect to Atlas MongoDB 
-// mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-6nqvj.mongodb.net/test?retryWrites=true&w=majority', {
+ 
+// mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-iuoku.mongodb.net/test?retryWrites=true&w=majority', {
 // 	useNewUrlParser: true,
 // 	useCreateIndex: true
 // }).then(() => {
-// 	console.log('Coneected to DB!!');
+// 	console.log('Coneected to DB on MongoDB Atlas!!');
 // }).catch(err => {
 // 	console.log('ERROR:', err.message);
 // });
@@ -70,11 +82,12 @@ app.use(indexRoutes);
 app.use("/campgrounds", campgroundsRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-// app.listen(process.env.PORT, process.env.IP, function(){
-//    console.log("The YelpCamp Server Has Started!");
-// });
-// Changed for localhost running the app
+app.listen(process.env.PORT ||3000, function(){
+   console.log("The YelpCamp Server Has Started! Listening on port %d in %s mode");
+});
+
+//Changed for localhost running the app
 // var PORT = 3000;
-app.listen(3000, () => 
-    console.log(`Yelp app has started app listening on 3000`)
-);
+// app.listen(3000, () => 
+//     console.log(`Yelp app has started app listening on 3000`)
+// );

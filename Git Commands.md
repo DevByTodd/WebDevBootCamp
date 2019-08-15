@@ -1,4 +1,15 @@
 Git commands
+//Do this for Heroku
+// Within the directory you want to push to heroku
+git init
+git add .
+git commit -m "corrected app.js added mongo cloud Atlas"
+
+//Push the files to heroku
+git push heroku master
+// to view the logs within the heroku env
+heroku logs --tail
+
 
 //do this for each update
 git diff
