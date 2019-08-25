@@ -27,8 +27,6 @@ var commentRoutes       = require("./routes/comments"),
 // in console 
 // export DATABASEURL=
 
-console.log("Coneected to DB on " + process.env.DATABASEURL);
-
 const dbURL = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v12";
 mongoose.connect(dbURL, { 
         useNewUrlParser: true,
@@ -38,7 +36,7 @@ mongoose.connect(dbURL, {
     }).catch(err => {
         console.log('ERROR:', err.message);
 });
- 
+
 // mongoose.connect('mongodb+srv://debbytodd:T0ddrocks1!@cluster0-iuoku.mongodb.net/test?retryWrites=true&w=majority', {
 // 	useNewUrlParser: true,
 // 	useCreateIndex: true
